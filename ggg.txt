@@ -1,1 +1,2 @@
-recyclerReceipt <androidx.recyclerview.widget.RecyclerView>: Missing registered class
+Couldn't connect to the database, Error:
+connection to server at "127.0.0.1", port 3306 failed: received invalid response to SSL negotiation: J
