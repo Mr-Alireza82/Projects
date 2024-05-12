@@ -3,21 +3,14 @@ def connect_to_database(self):
     Establish a connection to the MySQL database.
     """
     try:
-        # Create SSL configuration dictionary
-        ssl_config = {
-            'ssl_ca': '/path/to/ca_certificate.pem',  # Path to CA certificate file
-            'ssl_cert': '/path/to/client_certificate.pem',  # Path to client certificate file
-            'ssl_key': '/path/to/client_key.pem'  # Path to client key file
-        }
-
-        # Create a connection to the database with SSL parameters
+        # Create a connection to the database with SSL enabled
         self.connection = connect(
             host=self.host,
             user=self.user,
             password=self.password,
             port=self.port,
             database=self.database,
-            ssl=ssl_config
+            ssl={'ssl_verify_cert': False}  # Disable SSL certificate verification
         )
 
         self.connection.autocommit = True
