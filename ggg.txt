@@ -1,72 +1,31 @@
-from sys import exit
-from PyQt6.QtWidgets import QMainWindow
-from mysql.connector import connect, Error
-
-
-# noinspection SqlDialectInspection,SqlNoDataSourceInspection
-class Connection(QMainWindow):
+def connect_to_database(self):
     """
-    Managing MySQL connections.
+    Establish a connection to the MySQL database.
     """
-    def __init__(self, host, user, password, port, database):
-        """Initialize the database connection."""
-        super().__init__()
+    try:
+        # Create SSL configuration dictionary
+        ssl_config = {
+            'ssl_ca': '/path/to/ca_certificate.pem',  # Path to CA certificate file
+            'ssl_cert': '/path/to/client_certificate.pem',  # Path to client certificate file
+            'ssl_key': '/path/to/client_key.pem'  # Path to client key file
+        }
 
-        try:
-            # Store the database connection parameters
-            self.host = host
-            self.user = user
-            self.password = password
-            self.port = port
-            self.database = database
-            self.connection = None
-            self.cursor = None
+        # Create a connection to the database with SSL parameters
+        self.connection = connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            port=self.port,
+            database=self.database,
+            ssl=ssl_config
+        )
 
-            # Connect to the database
-            self.connect_to_database()
+        self.connection.autocommit = True
 
-        except Error as e:
-            print("Couldn't initialize the database connection, Error:\n{}".format(e))
-            exit()
+        # Create a cursor for executing queries
+        self.cursor = self.connection.cursor()
+        return
 
-    def connect_to_database(self):
-        """
-        Establish a connection to the MySQL database.
-        """
-        try:
-            # Create a connection to the database
-            self.connection = connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                port=self.port,
-                database=self.database
-            )
-
-            self.connection.autocommit = True
-
-            # Create a cursor for executing queries
-            self.cursor = self.connection.cursor()
-            return
-
-        except Error as e:
-            print("Couldn't connect to the database, Error:\n{}".format(e))
-            exit()
-
-
-
-
-
-
-
-
-
-
-
-
-[MySQL]
-host = 127.0.0.1
-user = root
-password = Alireza8082
-port = 3306
-database = mysql
+    except Error as e:
+        print("Couldn't connect to the database, Error:\n{}".format(e))
+        exit()
